@@ -28,6 +28,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmap
+import com.example.mylauncher.ui.BackPressedHandler
 import com.example.mylauncher.ui.theme.MyLauncherTheme
 
 class MainActivity : ComponentActivity() {
@@ -35,13 +36,15 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             val appInfoList = AppInfoList.create(this)
-            MyLauncherTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    AppList(appInfoList)
+            BackPressedHandler {
+                MyLauncherTheme {
+                    // A surface container using the 'background' color from the theme
+                    Surface(
+                        modifier = Modifier.fillMaxSize(),
+                        color = MaterialTheme.colorScheme.background
+                    ) {
+                        AppList(appInfoList)
+                    }
                 }
             }
         }
