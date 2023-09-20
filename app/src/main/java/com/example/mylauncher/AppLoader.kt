@@ -6,9 +6,10 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.pm.PackageManager.ResolveInfoFlags
 import android.graphics.drawable.Drawable
+import com.example.mylauncher.model.App
 
-object AppInfoList {
-    fun create(context: Context): List<AppInfo> {
+object AppLoader {
+    fun loadAllApps(context: Context): List<App> {
         val pm = context.packageManager
         val intent = Intent(Intent.ACTION_MAIN).apply {
             addCategory(Intent.CATEGORY_LAUNCHER)
@@ -21,7 +22,7 @@ object AppInfoList {
             .mapNotNull { it.activityInfo }
             .filter { it.packageName != context.packageName }
             .map {
-                AppInfo(
+                App(
                     it.loadIcon(pm) ?: getDefaultIcon(context),
                     it.loadLabel(pm).toString(),
                     ComponentName(it.packageName, it.name)

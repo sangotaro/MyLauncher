@@ -1,25 +1,29 @@
 package com.example.mylauncher
 
-import android.content.Context
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.mylauncher.data.AppsRepository
+import com.example.mylauncher.model.App
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 data class UiState(
-    val appInfoList: List<AppInfo> = emptyList(),
+    val apps: List<App> = emptyList(),
 )
 
 @HiltViewModel
 class MainScreenViewModel @Inject constructor(
-    @ApplicationContext private val context: Context,
+    private val appsRepository: AppsRepository,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> get() = _uiState
 
     init {
-        _uiState.value = _uiState.value.copy(appInfoList = AppInfoList.create(context))
+        viewModelScope.launch {
+            _uiState.value = _uiState.value.copy(apps = appsRepository.getAllApps())
+        }
     }
 }

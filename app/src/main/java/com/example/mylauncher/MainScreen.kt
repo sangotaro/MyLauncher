@@ -26,15 +26,16 @@ import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmap
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.mylauncher.model.App
 import com.example.mylauncher.ui.theme.MyLauncherTheme
 
 @Composable
 fun MainScreen(viewModel: MainScreenViewModel = viewModel()) {
-    AppList(viewModel.uiState.collectAsStateWithLifecycle().value.appInfoList)
+    AppList(viewModel.uiState.collectAsStateWithLifecycle().value.apps)
 }
 
 @Composable
-fun AppList(appInfoList: List<AppInfo>) {
+fun AppList(apps: List<App>) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -42,14 +43,14 @@ fun AppList(appInfoList: List<AppInfo>) {
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        appInfoList.forEach { appInfo ->
-            AppItem(appInfo)
+        apps.forEach { app ->
+            AppItem(app)
         }
     }
 }
 
 @Composable
-fun AppItem(appInfo: AppInfo) {
+fun AppItem(app: App) {
     val context = LocalContext.current
     Row(
         modifier = Modifier
@@ -59,7 +60,7 @@ fun AppItem(appInfo: AppInfo) {
                     flags =
                         Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED
                     addCategory(Intent.CATEGORY_LAUNCHER)
-                    component = appInfo.componentName
+                    component = app.componentName
                 }
                 context.startActivity(intent)
             },
@@ -67,24 +68,24 @@ fun AppItem(appInfo: AppInfo) {
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Image(
-            bitmap = appInfo.icon.toBitmap().asImageBitmap(),
+            bitmap = app.icon.toBitmap().asImageBitmap(),
             contentDescription = null,
             contentScale = ContentScale.Fit,
             modifier = Modifier.size(48.dp)
         )
-        Text(text = appInfo.label, style = MaterialTheme.typography.bodyLarge)
+        Text(text = app.label, style = MaterialTheme.typography.bodyLarge)
     }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun AppItemPreview() {
-    val appInfo = AppInfo(
+    val app = App(
         icon = LocalContext.current.getDrawable(R.mipmap.ic_launcher_round)!!,
         label = "Sample App",
         componentName = ComponentName(LocalContext.current, MainActivity::class.java)
     )
     MyLauncherTheme {
-        AppItem(appInfo)
+        AppItem(app)
     }
 }

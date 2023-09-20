@@ -1,9 +1,9 @@
-package com.example.mylauncher
+package com.example.mylauncher.model
 
 import android.content.ComponentName
 import android.graphics.drawable.Drawable
 
-data class AppInfo(
+data class App(
     val icon: Drawable,
     val label: String,
     val componentName: ComponentName
